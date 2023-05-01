@@ -69,7 +69,7 @@ public class GameField{
 
     public boolean isSolved() {
         // проверка, решена ли игра
-        return false; // ВРЕМЕННАЯ ХУЕТА
+        return false; // ВРЕМЕННАЯ 
     }
 
     // методы для работы с ячейками
