@@ -1,4 +1,9 @@
 package Model;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Cell {
     private Tile _tile;
 
@@ -18,6 +23,31 @@ public class Cell {
         this._col = col;
     }
 
+    // ------------------------------- Соседи ---------------------------------
+    private final Map<Direction, Cell> _neighbors = new HashMap<>();
+
+    public Cell neighbor(Direction direct) {
+
+        if(_neighbors.containsKey(direct)) {
+            return _neighbors.get(direct);
+        }
+
+        return null;
+    }
+    public Map<Direction, Cell> neighbors() {
+        return Collections.unmodifiableMap(_neighbors);
+    }
+
+    void setNeighbor(Direction direct, Cell neighbor) {
+        if(neighbor != this && !isNeighbor(neighbor)) {
+            _neighbors.put(direct, neighbor);
+            neighbor.setNeighbor(direct.opposite(), this);
+        }
+    }
+
+    public boolean isNeighbor(Cell other) {
+        return _neighbors.containsValue(other);
+    }
 
     // ------------------------------- Владение юнитом ---------------------------------
     public Tile getTile() {

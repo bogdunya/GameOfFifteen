@@ -1,5 +1,6 @@
 package Model;
-import java.util.Random;
+import java.util.*;
+
 public class GameField{
 
     // ---------------------- Размеры -----------------------------
@@ -14,19 +15,18 @@ public class GameField{
     public int height() {
         return _height;
     }
-    private final Cell[][] cells = new Cell[4][4];
-
+    private final Cell[][] _cells = new Cell[4][4];
+    private final Tile[] _tiles = new Tile[15];
+    //private final HashMap<CellPosition, Cell> _cells = new HashMap<>();
     // ---------------------------- Порождение ---------------------
 
     public GameField(int height, int width) {
         if (width <= 0 || height <= 0) {
             throw new IllegalArgumentException();
         }
-
         _width = width;
         _height = height;
         buildField();
-
     }
 
     private void buildField() {
@@ -34,8 +34,8 @@ public class GameField{
         // Создаем ячейки
         for (int row = 0; row < height(); row++) {
             for (int col = 0; col < width(); col++) {
-                CellPosition pos = new CellPosition(row, col);
-                _cells.put(pos, new Cell(pos));
+                //  CellPosition pos = new CellPosition(row, col);
+                _cells[row][col] = new Cell(row, col);
             }
         }
 
@@ -43,41 +43,51 @@ public class GameField{
         for (int row = 0; row < height(); row++) {
             for (int col = 0; col < width(); col++) {
 
-                Cell cell = cell(row, col);
+                Cell cell = new Cell(row, col);
 
                 if (height() > 1 && row < height() - 1) {
-                    cell.setNeighbor(Direction.south(), cell(row + 1, col));
+                    cell.setNeighbor(Direction.south(), cell = new Cell(row + 1, col));
                 }
                 if (row > 0) {
-                    cell.setNeighbor(Direction.north(), cell(row - 1, col));
+                    cell.setNeighbor(Direction.north(), cell = new Cell(row - 1, col));
                 }
                 if (width() > 1 && col < width() - 1) {
-                    cell.setNeighbor(Direction.east(), cell(row, col + 1));
+                    cell.setNeighbor(Direction.east(), cell = new Cell(row, col + 1));
                 }
                 if (col > 0) {
-                    cell.setNeighbor(Direction.west(), cell(row, col - 1));
+                    cell.setNeighbor(Direction.west(), cell = new Cell(row, col - 1));
                 }
             }
         }
-    }
+        // Создаем костяшки
+        //делаем из двумерного одномерный
+        List<Cell> oneLineCells = new ArrayList<>(16);
+        for (int row = 0; row < height(); row++) {
+            for (int col = 0; col < width(); col++) {
+            oneLineCells.add(_cells[row][col]);
+            }
+        }
+        //перемешиваем ячейки
+        Collections.shuffle(oneLineCells);
 
-    public void generateTiles() {
-        // генерация костяшек
-        // расстановка костяшек на поле
-
+        //присваиваем костяшкам ячейки
+        for (int i = 0; i < height()*width(); i++) {
+            _tiles[i] = new Tile(i);
+            _tiles[i].setOwner(oneLineCells.get(i));
+        }
     }
 
     public boolean isSolved() {
         // проверка, решена ли игра
-        return false; // ВРЕМЕННАЯ 
+        for (int row = 0; row < height(); row++) {
+            for (int col = 0; col < width(); col++) {
+            }
+        }
+        return false; // ВРЕМЕННАЯ
     }
 
     // методы для работы с ячейками
-    public Cell getCell(int row, int col) {
-        return cells[row][col];
-    }
-
-    public void setCell(int row, int col, Tile tile) {
-        cells[row][col].setTile(tile);
-    }
+//     public Cell getCell(int row, int col) {
+//        return cells[row][col];
+//    }
 }

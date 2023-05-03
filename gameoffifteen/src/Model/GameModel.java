@@ -1,14 +1,16 @@
 package Model;
 public class GameModel {
-    private Field field;
+
+    GameField _field;
 
     public void startGame() {
-        field = new Field();
+
+        _field = new GameField(4,4);
         // заполнение поля костяшками
-        field.generateField();
+      //  field.generateField();
     }
 
     public boolean isGameOver() {
-        return field.isSolved();
+        return _field.isSolved();
     }
 }

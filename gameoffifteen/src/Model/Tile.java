@@ -3,10 +3,8 @@ public class Tile {
     private int value;
     private Cell _owner;
 
-    public Tile(int value, Cell cell) {
+    public Tile(int value) {
         this.value = value;
-        this._owner = cell;
-        cell.setTile(this);
     }
 
     public void move(Cell cell) {
