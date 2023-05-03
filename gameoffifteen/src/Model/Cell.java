@@ -22,7 +22,6 @@ public class Cell {
         this._row = row;
         this._col = col;
     }
-
     // ------------------------------- Соседи ---------------------------------
     private final Map<Direction, Cell> _neighbors = new HashMap<>();
 
@@ -38,6 +37,30 @@ public class Cell {
         return Collections.unmodifiableMap(_neighbors);
     }
 
+    public boolean hasEmptyNeighbor(){
+        boolean hasEmptyNei = false;
+        if(_neighbors.get(Direction.north()).isEmpty())
+            hasEmptyNei = true;
+            //Cell emptyNeighbor = _neighbors.get(Direction.north();
+            else if(_neighbors.get(Direction.south()).isEmpty())
+            hasEmptyNei = true;
+            else if(_neighbors.get(Direction.east()).isEmpty())
+            hasEmptyNei = true;
+            else if(_neighbors.get(Direction.west()).isEmpty())
+            hasEmptyNei = true;
+        return hasEmptyNei;
+    }
+    public Cell getEmptyNeighbor(){
+        if(_neighbors.get(Direction.north()).isEmpty())
+            return neighbor(Direction.north());
+        else if(_neighbors.get(Direction.south()).isEmpty())
+            return neighbor(Direction.south());
+        else if(_neighbors.get(Direction.east()).isEmpty())
+            return neighbor(Direction.east());
+        else if(_neighbors.get(Direction.west()).isEmpty())
+            return neighbor(Direction.west());
+        return null;
+    }
     void setNeighbor(Direction direct, Cell neighbor) {
         if(neighbor != this && !isNeighbor(neighbor)) {
             _neighbors.put(direct, neighbor);
@@ -60,18 +83,14 @@ public class Cell {
         return _tile == null;
     }
 
-    public Tile extractTile(){
+    public void extractTile(Cell newOwner){
         if( !isEmpty() ) {     // !!!! У владельца НЕ может быть двух юнитов
             _tile.removeOwner();
         }
-
         Tile removedUnit = _tile;
         _tile = null;
-
-        return removedUnit;
+        newOwner.setTile(removedUnit);
+        removedUnit.setOwner(newOwner);
     }
-
-
-
 }
 

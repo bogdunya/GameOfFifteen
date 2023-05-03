@@ -7,14 +7,19 @@ public class Tile {
         this.value = value;
     }
 
-    public void move(Cell cell) {
-        if (_owner != null) {
-            _owner.setTile(null);
-        }
-        if (cell != null && cell.getTile() == null) {
-            _owner = cell;
-            cell.setTile(this);
-        }
+    public void move() {
+    if(_owner.hasEmptyNeighbor()){
+        Cell emptyNeigh = _owner.getEmptyNeighbor();
+        _owner.extractTile(emptyNeigh);
+    }
+
+//        if (_owner != null) {
+//            _owner.setTile(null);
+//        }
+//        if (cell != null && cell.getTile() == null) {
+//            _owner = cell;
+//            cell.setTile(this);
+//        }
     }
     public int getValue() {
         return value;
