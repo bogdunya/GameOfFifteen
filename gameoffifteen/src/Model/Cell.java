@@ -21,6 +21,7 @@ public class Cell {
     public Cell(int row, int col) {
         this._row = row;
         this._col = col;
+        _tile = null;
     }
     // ------------------------------- Соседи ---------------------------------
     private final Map<Direction, Cell> _neighbors = new HashMap<>();
@@ -33,31 +34,39 @@ public class Cell {
 
         return null;
     }
+    public Map<Direction, Cell> get_neighbors(){
+        return _neighbors;
+    }
     public Map<Direction, Cell> neighbors() {
         return Collections.unmodifiableMap(_neighbors);
     }
 
     public boolean hasEmptyNeighbor(){
         boolean hasEmptyNei = false;
-        if(_neighbors.get(Direction.north()).isEmpty())
+        if(_neighbors.get(Direction.north())!=null && _neighbors.get(Direction.north()).isEmpty())
             hasEmptyNei = true;
-            //Cell emptyNeighbor = _neighbors.get(Direction.north();
-            else if(_neighbors.get(Direction.south()).isEmpty())
+
+            else if(_neighbors.get(Direction.south())!=null && _neighbors.get(Direction.south()).isEmpty())
             hasEmptyNei = true;
-            else if(_neighbors.get(Direction.east()).isEmpty())
+
+            else if(_neighbors.get(Direction.east())!=null && _neighbors.get(Direction.east()).isEmpty())
             hasEmptyNei = true;
-            else if(_neighbors.get(Direction.west()).isEmpty())
+
+            else if(_neighbors.get(Direction.west())!=null && _neighbors.get(Direction.west()).isEmpty())
             hasEmptyNei = true;
         return hasEmptyNei;
     }
     public Cell getEmptyNeighbor(){
-        if(_neighbors.get(Direction.north()).isEmpty())
+        if(_neighbors.get(Direction.north())!=null && _neighbors.get(Direction.north()).isEmpty())
             return neighbor(Direction.north());
-        else if(_neighbors.get(Direction.south()).isEmpty())
+
+        else if(_neighbors.get(Direction.south())!=null &&_neighbors.get(Direction.south()).isEmpty())
             return neighbor(Direction.south());
-        else if(_neighbors.get(Direction.east()).isEmpty())
+
+        else if(_neighbors.get(Direction.east())!=null &&_neighbors.get(Direction.east()).isEmpty())
             return neighbor(Direction.east());
-        else if(_neighbors.get(Direction.west()).isEmpty())
+
+        else if(_neighbors.get(Direction.west())!=null &&_neighbors.get(Direction.west()).isEmpty())
             return neighbor(Direction.west());
         return null;
     }
@@ -84,9 +93,8 @@ public class Cell {
     }
 
     public void extractTile(Cell newOwner){
-        if( !isEmpty() ) {     // !!!! У владельца НЕ может быть двух юнитов
-            _tile.removeOwner();
-        }
+        // !!!! У владельца НЕ может быть двух юнитов
+        _tile.removeOwner();
         Tile removedUnit = _tile;
         _tile = null;
         newOwner.setTile(removedUnit);

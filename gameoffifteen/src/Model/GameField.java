@@ -16,7 +16,7 @@ public class GameField{
         return _height;
     }
     private final Cell[][] _cells = new Cell[4][4];
-    private final Tile[] _tiles = new Tile[15];
+    private final List<Tile> _tiles =new ArrayList<>(15);
     //private final HashMap<CellPosition, Cell> _cells = new HashMap<>();
     // ---------------------------- Порождение ---------------------
 
@@ -26,10 +26,10 @@ public class GameField{
         }
         _width = width;
         _height = height;
-        buildField();
+
     }
 
-    private void buildField() {
+    public void buildField() {
 
         // Создаем ячейки
         for (int row = 0; row < height(); row++) {
@@ -61,22 +61,39 @@ public class GameField{
         }
         // Создаем костяшки
         //делаем из двумерного одномерный
-        List<Cell> oneLineCells = new ArrayList<>(16);
-        for (int row = 0; row < height(); row++) {
-            for (int col = 0; col < width(); col++) {
-            oneLineCells.add(_cells[row][col]);
-            }
-        }
+//        List<Cell> oneLineCells = new ArrayList<>(16);
+//        for (int row = 0; row < height(); row++) {
+//            for (int col = 0; col < width(); col++) {
+//            oneLineCells.add(_cells[row][col]);
+//            }
+//        }
         //перемешиваем ячейки
-        Collections.shuffle(oneLineCells);
+        for (int i = 0; i < width()*height()-1; i++) {
+            _tiles.add(new Tile(i+1));
+        }
+        Collections.shuffle(_tiles);
 
         //присваиваем костяшкам ячейки
-        for (int i = 0; i < height()*width(); i++) {
-            _tiles[i] = new Tile(i);
-            _tiles[i].setOwner(oneLineCells.get(i));
-        }
+        int oo = 0;
+
+            for (int row = 0; row < height(); row++) {
+                for (int col = 0; col < width(); col++) {
+                    if(oo!=15) {
+                        _cells[row][col].setTile(_tiles.get(oo));
+                        _tiles.get(oo).setOwner(_cells[row][col]);
+                        oo++;
+                    }
+                }
+            }
+
     }
 
+    public Cell[][] get_cells(){
+        return _cells;
+    }
+    public List<Tile> get_tiles(){
+        return _tiles;
+    }
     public boolean isSolved() {
         // проверка, решена ли игра
         for (int row = 0; row < height(); row++) {

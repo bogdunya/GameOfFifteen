@@ -8,6 +8,7 @@ public class GameModel {
         _field = new GameField(4,4);
         // заполнение поля костяшками
       //  field.generateField();
+        _field.buildField();
     }
 
     public boolean isGameOver() {
